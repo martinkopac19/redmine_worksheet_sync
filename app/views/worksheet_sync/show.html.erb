@@ -1,0 +1,142 @@
+<h2><%= l(:label_worksheet_sync) %></h2>
+
+<p class="nf-intro"><%= l(:text_ws_intro) %></p>
+
+<%# ---- výsledok behu (náhľad / import) ---- %>
+<% if @report %>
+  <fieldset class="box">
+    <legend><%= @ran == :preview ? l(:label_ws_preview_result) : l(:label_ws_import_result) %>
+      (<%= @from %> … <%= @to %>)</legend>
+    <p>
+      <strong><%= l(:label_ws_imported) %>:</strong> <%= @report[:imported].size %> ·
+      <%= l(:label_ws_dup) %>: <%= @report[:dup].size %> ·
+      <%= l(:label_ws_no_issue) %>: <%= @report[:no_issue].size %> ·
+      <%= l(:label_ws_no_perm) %>: <%= @report[:no_perm].size %> ·
+      <%= l(:label_ws_locked) %>: <%= @report[:locked].size %> ·
+      <%= l(:label_ws_not_matching) %>: <%= @report[:not_matching].size %>
+    </p>
+    <% shown = (@report[:imported] + @report[:no_issue] + @report[:no_perm] + @report[:dup]) %>
+    <% if shown.any? %>
+      <table class="list">
+        <thead><tr>
+          <th><%= l(:field_spent_on) %></th><th><%= l(:label_ws_person) %></th>
+          <th>#</th><th><%= l(:field_hours) %></th><th><%= l(:field_comments) %></th>
+          <th><%= l(:field_status) %></th>
+        </tr></thead>
+        <tbody>
+          <% @report[:imported].each do |r| %>
+            <tr><td><%= r[:date] %></td><td><%= r[:user] %></td>
+              <td><%= link_to "##{r[:issue_id]}", issue_path(r[:issue_id]) rescue "##{r[:issue_id]}" %></td>
+              <td><%= r[:hours] %></td><td><%= r[:comment] %></td>
+              <td><%= @ran == :preview ? l(:label_ws_will_import) : l(:label_ws_done) %></td></tr>
+          <% end %>
+          <% @report[:dup].each do |r| %>
+            <tr><td><%= r[:date] %></td><td><%= r[:user] %></td><td>#<%= r[:issue_id] %></td>
+              <td><%= r[:hours] %></td><td><%= r[:comment] %></td><td><%= l(:label_ws_dup) %></td></tr>
+          <% end %>
+          <% @report[:no_issue].each do |r| %>
+            <tr><td><%= r[:date] %></td><td><%= r[:user] %></td><td>#<%= r[:issue_id] %></td>
+              <td><%= r[:hours] %></td><td><%= r[:comment] %></td><td class="nf-warn"><%= l(:label_ws_no_issue) %></td></tr>
+          <% end %>
+          <% @report[:no_perm].each do |r| %>
+            <tr><td><%= r[:date] %></td><td><%= r[:user] %></td><td>#<%= r[:issue_id] %></td>
+              <td><%= r[:hours] %></td><td><%= r[:comment] %></td><td class="nf-warn"><%= l(:label_ws_no_perm) %></td></tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </fieldset>
+<% end %>
+
+<%# ---- konfigurácia ---- %>
+<%= form_tag({ action: 'update' }, method: :post) do %>
+  <fieldset class="box tabular">
+    <legend><%= l(:label_ws_config) %></legend>
+    <p>
+      <label><%= l(:label_ws_api_key) %></label>
+      <%= password_field_tag 'ws_api_key', @settings['ws_api_key'], size: 40, autocomplete: 'off' %>
+      <em class="info"><%= l(:text_ws_api_key_hint) %></em>
+    </p>
+    <p>
+      <label><%= l(:label_ws_service_user) %></label>
+      <%= select_tag 'service_user_id',
+            options_for_select([['—', '']] + @users.map { |u| [u.name, u.id] }, @settings['service_user_id'].to_i) %>
+      <em class="info"><%= l(:text_ws_service_user_hint) %></em>
+    </p>
+    <p>
+      <label><%= l(:label_ws_service_api_key) %></label>
+      <%= password_field_tag 'service_api_key', @settings['service_api_key'], size: 40, autocomplete: 'off' %>
+      <em class="info"><%= l(:text_ws_service_api_key_hint) %></em>
+    </p>
+    <p>
+      <label><%= l(:label_ws_activity) %></label>
+      <%= select_tag 'activity_name',
+            options_for_select(@activities.map { |a| [a.name, a.name] }, @settings['activity_name']) %>
+    </p>
+    <p>
+      <label><%= l(:label_ws_cron_enabled) %></label>
+      <%= hidden_field_tag 'cron_enabled', '0' %>
+      <%= check_box_tag 'cron_enabled', '1', @settings['cron_enabled'] %>
+      <em class="info"><%= l(:text_ws_cron_hint) %></em>
+    </p>
+    <p>
+      <label><%= l(:label_ws_cron_window) %></label>
+      <%= text_field_tag 'cron_window_days', @settings['cron_window_days'] || 10, size: 4 %>
+    </p>
+  </fieldset>
+
+  <fieldset class="box">
+    <legend><%= l(:label_ws_mapping) %></legend>
+    <% if @settings['ws_api_key'].blank? %>
+      <p class="nf-hint"><%= l(:text_ws_enter_key_first) %></p>
+    <% elsif @employees_error %>
+      <p class="nf-warn"><%= l(:text_ws_employees_error) %>: <%= @employees_error %></p>
+    <% elsif @employees %>
+      <p class="nf-hint"><%= l(:text_ws_mapping_hint) %></p>
+      <table class="list">
+        <thead><tr><th><%= l(:label_ws_employee) %></th><th><%= l(:label_ws_redmine_user) %></th></tr></thead>
+        <tbody>
+          <% @employees.each do |e| %>
+            <% eid = e['id'].to_s %>
+            <% current = @settings['mapping'][eid].presence || @suggested[eid] %>
+            <tr>
+              <td><%= e['name'] %> <span class="nf-arrow">(#<%= eid %>)</span></td>
+              <td><%= select_tag "mapping[#{eid}]",
+                        options_for_select([[l(:label_ws_skip), '']] + @users.map { |u| [u.name, u.id] }, current.to_i),
+                        class: (@suggested[eid] && @settings['mapping'][eid].blank? ? 'nf-suggested' : nil) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </fieldset>
+
+  <p><%= submit_tag l(:button_save) %></p>
+<% end %>
+
+<%# ---- manuálny beh ---- %>
+<%= form_tag({ action: 'run' }, method: :post) do %>
+  <fieldset class="box">
+    <legend><%= l(:label_ws_manual) %></legend>
+    <p class="nf-hint"><%= l(:text_ws_manual_hint) %></p>
+    <p>
+      <label><%= l(:label_ws_from) %></label>
+      <%= text_field_tag 'from', @from, size: 12 %>
+      <label><%= l(:label_ws_to) %></label>
+      <%= text_field_tag 'to', @to, size: 12 %>
+    </p>
+    <p>
+      <%= submit_tag l(:label_ws_preview), name: 'commit_preview' %>
+      <%= submit_tag l(:label_ws_import_now), name: 'commit_import',
+            data: { confirm: l(:text_ws_import_confirm) } %>
+    </p>
+  </fieldset>
+<% end %>
+
+<style>
+  .nf-intro, .nf-hint { color: #515151; max-width: 820px; }
+  .nf-warn { color: #A30000; font-weight: 500; }
+  .nf-arrow { color: #B2B2B2; }
+  .nf-suggested { outline: 2px solid #FFE8D8; }
+  #content fieldset.box legend { font-weight: 600; }
+</style>
