@@ -82,6 +82,7 @@
     <p>
       <label><%= l(:label_ws_cron_window) %></label>
       <%= text_field_tag 'cron_window_days', @settings['cron_window_days'] || 10, size: 4 %>
+      <em class="info"><%= l(:text_ws_cron_window_hint) %></em>
     </p>
   </fieldset>
 

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.1 — 2026-07-20
+- Added an in-UI explanation for the "Cron window (days back)" field.
+
 ## 0.1.0 — 2026-07-17
 - Initial release.
 - Central, admin-driven import of logged time from ws.previo.cz into Redmine.

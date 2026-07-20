@@ -13,6 +13,7 @@ en:
   label_ws_cron_enabled: "Enable automatic (cron) import"
   text_ws_cron_hint: "Cron imports only locked days (that can no longer be edited in Worksheet)."
   label_ws_cron_window: "Cron window (days back)"
+  text_ws_cron_window_hint: "How many days back the daily cron looks into Worksheet on each run. It re-checks this window every day but imports each entry only once (already-imported entries are skipped via dedup, not-yet-locked days wait). It only exists to catch up if the cron didn't run for a few days (e.g. over holidays) — so a small number is enough. 10 is a safe default; you can leave it as is."
 
   label_ws_mapping: "Mapping: Worksheet employee → Redmine user"
   text_ws_mapping_hint: "Only mapped employees are imported. Highlighted rows are automatic name-based guesses — please check them."

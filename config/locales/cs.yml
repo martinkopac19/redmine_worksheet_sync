@@ -13,6 +13,7 @@ cs:
   label_ws_cron_enabled: "Zapnout automatický (cron) import"
   text_ws_cron_hint: "Cron importuje jen uzamčené dny (které už nelze ve Worksheetu upravit)."
   label_ws_cron_window: "Okno cronu (dní zpět)"
+  text_ws_cron_window_hint: "Kolik dní zpět se cron při každém denním běhu podívá do Worksheetu. Okno kontroluje denně, ale každý záznam naimportuje jen jednou (už importované přeskočí přes dedup, ještě neuzamčené dny počká). Slouží jen k dohnání, kdyby cron pár dní neběžel (např. přes svátky) — proto stačí malé číslo. 10 je bezpečná předvolba; klidně nech tak."
 
   label_ws_mapping: "Mapování: Worksheet zaměstnanec → Redmine uživatel"
   text_ws_mapping_hint: "Importují se jen namapovaní zaměstnanci. Zvýrazněné jsou automatické tipy podle jména — zkontroluj je."
