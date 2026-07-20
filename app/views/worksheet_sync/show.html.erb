@@ -95,9 +95,9 @@
       <p class="nf-warn"><%= l(:text_ws_employees_error) %>: <%= @employees_error %></p>
     <% elsif @employees %>
       <p class="nf-hint"><%= l(:text_ws_mapping_hint) %></p>
-      <p>
-        <button type="button" id="ws-unmap-all" class="ws-unmap">✕ <%= l(:label_ws_unmap_all) %></button>
-        <em class="info"><%= l(:text_ws_unmap_all_hint) %></em>
+      <p class="ws-unmap-row">
+        <button type="button" id="ws-unmap-all" class="ws-unmap"
+                title="<%= l(:text_ws_unmap_all_hint) %>">✕ <%= l(:label_ws_unmap_all) %></button>
       </p>
       <table class="list">
         <thead><tr><th><%= l(:label_ws_employee) %></th><th><%= l(:label_ws_redmine_user) %></th></tr></thead>
@@ -179,8 +179,11 @@
   .nf-arrow { color: #B2B2B2; }
   .nf-suggested { outline: 2px solid #FFE8D8; }
   #content fieldset.box legend { font-weight: 600; }
+  /* tlačidlo zarovnané nad stĺpec "Redmine user" (pravá polovica tabuľky) */
+  .ws-unmap-row { text-align: right; margin: 8px 0 4px; }
   .ws-unmap { cursor: pointer; border: 1px solid #E5E5E5; background: #fff;
-              border-radius: 8px; padding: 4px 12px; font-weight: 500; color: #515151; }
+              border-radius: 8px; padding: 4px 12px; font-weight: 500; color: #515151;
+              text-align: center; min-width: 160px; }
   .ws-unmap:hover { box-shadow: inset 0 0 0 1px #CCCCCC; }
 </style>
 
