@@ -1,9 +1,9 @@
 # Redmine Worksheet Sync
 
 A Redmine plugin that imports logged time from the **Previo Worksheet** app
-(`ws.previo.cz`) into Redmine. When a worksheet entry's text starts with an
-issue number — with or without a leading hash (`#55310` or `55310`) — the time
-is logged to that Redmine issue.
+(`ws.previo.cz`) into Redmine. When a worksheet entry's text starts with a **5-digit issue
+number** — with or without a leading hash (`#55310` or `55310`), and nothing
+before it — the time is logged to that Redmine issue.
 
 > **Previo-specific:** this plugin talks to the internal Worksheet API
 > (`ws.previo.cz`). It is useful as-is only inside Previo, but the code is a

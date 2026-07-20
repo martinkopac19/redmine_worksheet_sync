@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.5 — 2026-07-20
+- Stricter matching: exactly a 5-digit issue number at the very start, optional
+  leading hash. Rejects text before the number ("ID 55310"), 4-digit ("1234")
+  and 6-digit ("123456") numbers.
+
 ## 0.2.4 — 2026-07-20
 - The leading hash is now optional: both `#55310` and `55310` are accepted.
 

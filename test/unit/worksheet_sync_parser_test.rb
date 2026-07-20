@@ -45,4 +45,17 @@ class WorksheetSyncParserTest < ActiveSupport::TestCase
   def test_rejects_text_without_tag
     assert_nil RE.match('just some text')
   end
+
+  def test_rejects_text_before_number
+    assert_nil RE.match('ID 55310')
+  end
+
+  def test_rejects_four_digit_number
+    assert_nil RE.match('1234')
+  end
+
+  def test_rejects_six_digit_number
+    assert_nil RE.match('123456')
+    assert_nil RE.match('#123456')
+  end
 end
