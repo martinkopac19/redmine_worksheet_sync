@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.0 — 2026-07-20
+- Concurrency-safe dedup: the import-log row is written first (as a lock via the
+  unique index) inside a transaction, then the time entry — no more duplicate
+  time entries on simultaneous runs.
+- Ignore non-productive work types: `_Holiday`, `_Reciprocal service`, `Bonus`,
+  `LDO`, `Sick Leave`, `Pension/Life Insurance`, `Public holiday`.
+- Run history stored in DB with a CSV export (Administration → Worksheet sync).
+- Activity fallback is now reported (when the configured activity is missing on
+  a project, the entry is logged under the project's first activity instead of
+  being dropped).
+- Automated tests added (parser, finality rule, importer with a stubbed client).
+- Client is now dependency-injectable for testing.
+
 ## 0.1.2 — 2026-07-20
 - Import entries whose title is just `#<issue id>` with no comment (previously
   a comment was required). Empty comment is now allowed.

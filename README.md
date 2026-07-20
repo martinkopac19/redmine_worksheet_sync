@@ -39,7 +39,12 @@ the `author`.
   a worksheet entry for day *D* can be edited until the next working day, so it
   is imported only once `next_working_day(D)` has passed (Wed → Fri, Thu → Mon,
   Fri → Tue). Weekends handled; public holidays not (v1).
-- **Idempotent** — each worksheet entry (by its unique id) is imported once.
+- **Idempotent & concurrency-safe** — each worksheet entry (by its unique id) is
+  imported once; a unique-index lock inside a transaction prevents duplicates
+  even on simultaneous runs.
+- **Ignores non-productive work types** — `_Holiday`, `_Reciprocal service`,
+  `Bonus`, `LDO`, `Sick Leave`, `Pension/Life Insurance`, `Public holiday`.
+- **Run history + CSV export** in the admin page.
 - **GDPR** — salary fields from the Worksheet API are dropped immediately and
   never read, stored or displayed.
 - No core changes; writes via in-process ActiveRecord.
@@ -79,6 +84,16 @@ cd /path/to/redmine
 bundle exec rake redmine:plugins:migrate NAME=redmine_worksheet_sync VERSION=0 RAILS_ENV=production
 rm -rf plugins/redmine_worksheet_sync
 # restart Redmine
+```
+
+## Tests
+
+Automated tests live in `test/` (parser, finality rule, importer with a stubbed
+Worksheet client). Run them in a Redmine dev/test environment (with the `test`
+gem group installed):
+
+```bash
+RAILS_ENV=test bin/rails redmine:plugins:test NAME=redmine_worksheet_sync
 ```
 
 ## License

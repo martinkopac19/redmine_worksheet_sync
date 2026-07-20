@@ -5,10 +5,16 @@ module WorksheetSync
     # číslo tasku, za ním VOLITEĽNÝ komentár (aj samotné "#123" bez textu je platné)
     TITLE_RE = /\A\s*#(\d+)(?:\s+(.*))?\s*\z/m
 
-    def initialize(settings = nil)
+    # Work types z Worksheetu, ktoré sa nikdy neimportujú (neproduktívne)
+    EXCLUDE_WORK_TYPES = [
+      '_holiday', '_reciprocal service', 'bonus', 'ldo', 'sick leave',
+      'pension/life insurance', 'public holiday'
+    ].freeze
+
+    def initialize(settings = nil, client = nil)
       @s = settings || Setting.plugin_redmine_worksheet_sync
       @mapping      = @s['mapping'] || {}
-      @client       = Client.new(@s['ws_api_key'])
+      @client       = client || Client.new(@s['ws_api_key'])
       @service_user = resolve_service_user
       @activity_nm  = @s['activity_name'].presence || 'Development'
     end
@@ -37,8 +43,11 @@ module WorksheetSync
     private
 
     def process(e, user, report, lock_check, today, dry_run)
-      title = e['title'].to_s
-      m = TITLE_RE.match(title)
+      # neproduktívne work typy ignorujeme úplne
+      wt = e['workTypeName'].to_s.strip.downcase
+      return (report[:excluded_type] << info(e, user)) if EXCLUDE_WORK_TYPES.include?(wt)
+
+      m = TITLE_RE.match(e['title'].to_s)
       return (report[:not_matching] << info(e, user)) unless m
 
       issue_id = m[1].to_i
@@ -59,28 +68,41 @@ module WorksheetSync
 
       activity = project_activity(issue.project)
       return (report[:no_activity] << base) unless activity
+      fallback = (activity.name != @activity_nm)
 
       if dry_run
-        return (report[:imported] << base.merge(preview: true, project: issue.project.name))
+        return report[:imported] << base.merge(preview: true, project: issue.project.name,
+                                               activity: activity.name, activity_fallback: fallback)
       end
 
-      te = TimeEntry.new(
-        project: issue.project, issue: issue, user: user,
-        author: (@service_user || user), hours: hours, spent_on: date,
-        activity: activity, comments: comment
-      )
-      if te.save
-        WorksheetSyncImport.create(ws_entry_id: e['id'], time_entry_id: te.id,
-                                   user_id: user.id, spent_on: date)
-        report[:imported] << base.merge(time_entry_id: te.id, project: issue.project.name)
-      else
-        report[:failed] << base.merge(error: te.errors.full_messages.join(', '))
+      create_entry(e, user, issue, activity, hours, date, comment, base, fallback, report)
+    end
+
+    # Zápis odolný voči súbehu: najprv "zámok" (riadok v import logu cez unique
+    # index), až potom TimeEntry — celé v transakcii. Dva behy naraz => druhý
+    # dostane RecordNotUnique a skončí ako dup, nevznikne duplicitný čas.
+    def create_entry(e, user, issue, activity, hours, date, comment, base, fallback, report)
+      ActiveRecord::Base.transaction do
+        log = WorksheetSyncImport.create!(ws_entry_id: e['id'], user_id: user.id, spent_on: date)
+        te = TimeEntry.new(
+          project: issue.project, issue: issue, user: user,
+          author: (@service_user || user), hours: hours, spent_on: date,
+          activity: activity, comments: comment
+        )
+        te.save!
+        log.update!(time_entry_id: te.id)
+        report[:imported] << base.merge(time_entry_id: te.id, project: issue.project.name,
+                                        activity: activity.name, activity_fallback: fallback)
       end
+    rescue ActiveRecord::RecordNotUnique
+      report[:dup] << base
+    rescue ActiveRecord::RecordInvalid => ex
+      report[:failed] << base.merge(error: ex.message)
     end
 
     def info(e, user)
       { ws_id: e['id'], date: e['date'], hours: (e['duration'].to_f / 60.0).round(2),
-        title: e['title'], user: user&.name }
+        title: e['title'], work_type: e['workTypeName'], user: user&.name }
     end
 
     def locked?(date, today)

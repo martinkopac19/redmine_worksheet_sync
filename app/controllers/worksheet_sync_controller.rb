@@ -28,6 +28,9 @@ class WorksheetSyncController < ApplicationController
     dry  = params[:commit_import].blank?
     importer = WorksheetSync::Importer.new
     @report = importer.run(from: from, to: to, dry_run: dry)
+    unless dry
+      WorksheetSyncRun.record!(source: 'manual', date_from: from, date_to: to, report: @report)
+    end
     @ran = dry ? :preview : :import
     @from = from
     @to = to
@@ -35,6 +38,12 @@ class WorksheetSyncController < ApplicationController
     load_employees
     build_suggestions
     render :show
+  end
+
+  def runs_csv
+    send_data WorksheetSyncRun.to_csv,
+              type: 'text/csv; charset=utf-8',
+              filename: "worksheet_sync_runs_#{Date.today}.csv"
   end
 
   private
@@ -66,6 +75,7 @@ class WorksheetSyncController < ApplicationController
     @activities = TimeEntryActivity.shared.active.to_a
     @from ||= (Date.today - 14).to_s
     @to   ||= Date.today.to_s
+    @runs = WorksheetSyncRun.order(created_at: :desc).limit(20).to_a
   end
 
   def load_employees

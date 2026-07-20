@@ -42,3 +42,10 @@ en:
   label_ws_person: "Person"
   label_ws_will_import: "will import"
   label_ws_done: "done"
+  label_ws_excluded: "Ignored type"
+  label_ws_failed: "Write error"
+
+  label_ws_history: "Run history"
+  label_ws_no_runs: "No runs yet."
+  label_ws_export_csv: "Export to CSV"
+  label_ws_source: "Triggered by"

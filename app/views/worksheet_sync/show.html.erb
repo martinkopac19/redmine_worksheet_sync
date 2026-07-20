@@ -13,6 +13,7 @@
       <%= l(:label_ws_no_issue) %>: <%= @report[:no_issue].size %> ·
       <%= l(:label_ws_no_perm) %>: <%= @report[:no_perm].size %> ·
       <%= l(:label_ws_locked) %>: <%= @report[:locked].size %> ·
+      <%= l(:label_ws_excluded) %>: <%= @report[:excluded_type].size %> ·
       <%= l(:label_ws_not_matching) %>: <%= @report[:not_matching].size %>
     </p>
     <% shown = (@report[:imported] + @report[:no_issue] + @report[:no_perm] + @report[:dup]) %>
@@ -133,6 +134,40 @@
     </p>
   </fieldset>
 <% end %>
+
+<%# ---- história behov ---- %>
+<fieldset class="box">
+  <legend><%= l(:label_ws_history) %></legend>
+  <% if @runs.blank? %>
+    <p class="nf-hint"><%= l(:label_ws_no_runs) %></p>
+  <% else %>
+    <p><%= link_to l(:label_ws_export_csv), { action: 'runs_csv', format: 'csv' },
+                   class: 'icon icon-download' %></p>
+    <table class="list">
+      <thead><tr>
+        <th><%= l(:field_created_on) %></th><th><%= l(:label_ws_source) %></th>
+        <th><%= l(:label_ws_from) %></th><th><%= l(:label_ws_to) %></th>
+        <th><%= l(:label_ws_imported) %></th><th><%= l(:label_ws_dup) %></th>
+        <th><%= l(:label_ws_no_issue) %></th><th><%= l(:label_ws_no_perm) %></th>
+        <th><%= l(:label_ws_locked) %></th><th><%= l(:label_ws_excluded) %></th>
+        <th><%= l(:label_ws_not_matching) %></th><th><%= l(:label_ws_failed) %></th>
+      </tr></thead>
+      <tbody>
+        <% @runs.each do |r| %>
+          <tr>
+            <td><%= format_time(r.created_at) %></td>
+            <td><%= r.source %></td>
+            <td><%= r.date_from %></td><td><%= r.date_to %></td>
+            <td><%= r.imported %></td><td><%= r.duplicates %></td>
+            <td><%= r.no_issue %></td><td><%= r.no_perm %></td>
+            <td><%= r.locked %></td><td><%= r.excluded %></td>
+            <td><%= r.not_matching %></td><td><%= r.failed %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</fieldset>
 
 <style>
   .nf-intro, .nf-hint { color: #515151; max-width: 820px; }

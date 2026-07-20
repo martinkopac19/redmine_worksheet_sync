@@ -42,3 +42,10 @@ cs:
   label_ws_person: "Osoba"
   label_ws_will_import: "bude importováno"
   label_ws_done: "hotovo"
+  label_ws_excluded: "Ignorovaný typ"
+  label_ws_failed: "Chyba zápisu"
+
+  label_ws_history: "Historie běhů"
+  label_ws_no_runs: "Zatím žádný běh."
+  label_ws_export_csv: "Export do CSV"
+  label_ws_source: "Spuštěno"
