@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.1 — 2026-07-20
+- "Unmap all" button in the mapping table (clears all selections; save to persist).
+
 ## 0.2.0 — 2026-07-20
 - Concurrency-safe dedup: the import-log row is written first (as a lock via the
   unique index) inside a transaction, then the time entry — no more duplicate
