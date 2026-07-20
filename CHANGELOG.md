@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.6 — 2026-07-20
+- Fix: unmapping an employee now persists. Name-based suggestions only pre-fill
+  on first setup (before anything is saved); afterwards the saved state is
+  respected, so "do not map" no longer reverts to a suggestion after Save. Use
+  "Suggest all" to re-apply suggestions on demand.
+
 ## 0.2.5 — 2026-07-20
 - Stricter matching: exactly a 5-digit issue number at the very start, optional
   leading hash. Rejects text before the number ("ID 55310"), 4-digit ("1234")

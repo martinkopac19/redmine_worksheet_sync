@@ -101,18 +101,23 @@
         <button type="button" id="ws-unmap-all" class="ws-unmap"
                 title="<%= l(:text_ws_unmap_all_hint) %>">✕ <%= l(:label_ws_unmap_all) %></button>
       </p>
+      <%# návrhy predvyplníme LEN pri prvom nastavovaní (kým nič nie je uložené);
+          po prvom uložení rešpektujeme uložený stav (prázdne = nemapovať), nech
+          sa odmapovanie nevracia späť na návrh. Návrhy sa dajú kedykoľvek doplniť
+          tlačidlom „Navrhnúť všetko". %>
+      <% has_config = (@settings['mapping'] || {}).present? %>
       <table class="list">
         <thead><tr><th><%= l(:label_ws_employee) %></th><th><%= l(:label_ws_redmine_user) %></th></tr></thead>
         <tbody>
           <% @employees.each do |e| %>
             <% eid = e['id'].to_s %>
-            <% current = @settings['mapping'][eid].presence || @suggested[eid] %>
+            <% current = @settings['mapping'][eid].presence || (has_config ? nil : @suggested[eid]) %>
             <tr>
               <td><%= e['name'] %> <span class="nf-arrow">(#<%= eid %>)</span></td>
               <td><%= select_tag "mapping[#{eid}]",
                         options_for_select([[l(:label_ws_skip), '']] + @users.map { |u| [u.name, u.id] }, current.to_i),
                         data: { suggested: @suggested[eid] },
-                        class: (@suggested[eid] && @settings['mapping'][eid].blank? ? 'nf-suggested' : nil) %></td>
+                        class: (!has_config && @suggested[eid] ? 'nf-suggested' : nil) %></td>
             </tr>
           <% end %>
         </tbody>
