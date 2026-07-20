@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2 — 2026-07-20
+- Import entries whose title is just `#<issue id>` with no comment (previously
+  a comment was required). Empty comment is now allowed.
+
 ## 0.1.1 — 2026-07-20
 - Added an in-UI explanation for the "Cron window (days back)" field.
 

@@ -2,7 +2,8 @@ module WorksheetSync
   # Jadro: fetch → parse → (finality pri cron) → mapovanie → dedup → TimeEntry.
   # Vracia report po kategóriách. Beží in-process, píše len do lokálnej DB.
   class Importer
-    TITLE_RE = /\A\s*#(\d+)\s+(.+)\z/m
+    # číslo tasku, za ním VOLITEĽNÝ komentár (aj samotné "#123" bez textu je platné)
+    TITLE_RE = /\A\s*#(\d+)(?:\s+(.*))?\s*\z/m
 
     def initialize(settings = nil)
       @s = settings || Setting.plugin_redmine_worksheet_sync
@@ -41,7 +42,7 @@ module WorksheetSync
       return (report[:not_matching] << info(e, user)) unless m
 
       issue_id = m[1].to_i
-      comment  = m[2].strip
+      comment  = (m[2] || '').strip
       date     = e['date'].is_a?(String) ? Date.parse(e['date']) : e['date']
       hours    = (e['duration'].to_f / 60.0).round(2)
       base     = info(e, user).merge(issue_id: issue_id, hours: hours, comment: comment)
