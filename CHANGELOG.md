@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.3 — 2026-07-20
+- "Suggest all" button: fills the automatic name-based mapping guess for every
+  not-yet-mapped employee (manual choices are kept). Complements "Unmap all".
+
 ## 0.2.2 — 2026-07-20
 - "Unmap all" button aligned above the Redmine-user column, centered label.
 

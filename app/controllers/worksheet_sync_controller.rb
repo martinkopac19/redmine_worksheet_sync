@@ -53,7 +53,6 @@ class WorksheetSyncController < ApplicationController
     return unless @employees
     utok = @users.map { |u| [u.id, name_tokens("#{u.firstname} #{u.lastname}")] }
     @employees.each do |e|
-      next if @settings['mapping'][e['id'].to_s].present?
       et = name_tokens(e['name'])
       next if et.empty?
       best = utok.map { |id, t| [id, (t & et).size] }.max_by { |_, n| n }

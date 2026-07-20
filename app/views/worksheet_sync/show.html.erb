@@ -96,6 +96,8 @@
     <% elsif @employees %>
       <p class="nf-hint"><%= l(:text_ws_mapping_hint) %></p>
       <p class="ws-unmap-row">
+        <button type="button" id="ws-suggest-all" class="ws-unmap"
+                title="<%= l(:text_ws_suggest_all_hint) %>">✨ <%= l(:label_ws_suggest_all) %></button>
         <button type="button" id="ws-unmap-all" class="ws-unmap"
                 title="<%= l(:text_ws_unmap_all_hint) %>">✕ <%= l(:label_ws_unmap_all) %></button>
       </p>
@@ -109,6 +111,7 @@
               <td><%= e['name'] %> <span class="nf-arrow">(#<%= eid %>)</span></td>
               <td><%= select_tag "mapping[#{eid}]",
                         options_for_select([[l(:label_ws_skip), '']] + @users.map { |u| [u.name, u.id] }, current.to_i),
+                        data: { suggested: @suggested[eid] },
                         class: (@suggested[eid] && @settings['mapping'][eid].blank? ? 'nf-suggested' : nil) %></td>
             </tr>
           <% end %>
@@ -189,10 +192,17 @@
 
 <script>
   (function () {
-    var btn = document.getElementById('ws-unmap-all');
-    if (!btn) return;
-    btn.addEventListener('click', function () {
+    var unmap = document.getElementById('ws-unmap-all');
+    if (unmap) unmap.addEventListener('click', function () {
       document.querySelectorAll('select[name^="mapping"]').forEach(function (s) { s.value = ''; });
+    });
+    var suggest = document.getElementById('ws-suggest-all');
+    if (suggest) suggest.addEventListener('click', function () {
+      // doplní návrh len tam, kde ešte nie je nič vybrané (ručné voľby nechá)
+      document.querySelectorAll('select[name^="mapping"]').forEach(function (s) {
+        var sug = s.getAttribute('data-suggested');
+        if (sug && s.value === '') s.value = sug;
+      });
     });
   })();
 </script>

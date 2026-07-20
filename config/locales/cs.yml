@@ -24,6 +24,8 @@ cs:
   label_ws_skip: "— nemapovat —"
   label_ws_unmap_all: "Odmapovat vše"
   text_ws_unmap_all_hint: "Vynuluje všechny výběry v tabulce. Změna se uloží až tlačítkem Uložit."
+  label_ws_suggest_all: "Navrhnout vše"
+  text_ws_suggest_all_hint: "Doplní automatický návrh (podle jména) tam, kde ještě není nic vybráno. Ruční volby nechá. Uloží se až tlačítkem Uložit."
 
   label_ws_manual: "Ruční import"
   text_ws_manual_hint: "Náhled ti ukáže, co by se importovalo (nic nezapíše). Import zapíše čas do Redmine."

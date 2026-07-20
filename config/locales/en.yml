@@ -24,6 +24,8 @@ en:
   label_ws_skip: "— do not map —"
   label_ws_unmap_all: "Unmap all"
   text_ws_unmap_all_hint: "Clears all selections in the table. The change is saved only when you click Save."
+  label_ws_suggest_all: "Suggest all"
+  text_ws_suggest_all_hint: "Fills the automatic name-based guess where nothing is selected yet. Manual choices are kept. Saved only when you click Save."
 
   label_ws_manual: "Manual import"
   text_ws_manual_hint: "Preview shows what would be imported (writes nothing). Import writes the time into Redmine."
