@@ -2,8 +2,9 @@ module WorksheetSync
   # Jadro: fetch → parse → (finality pri cron) → mapovanie → dedup → TimeEntry.
   # Vracia report po kategóriách. Beží in-process, píše len do lokálnej DB.
   class Importer
-    # číslo tasku, za ním VOLITEĽNÝ komentár (aj samotné "#123" bez textu je platné)
-    TITLE_RE = /\A\s*#(\d+)(?:\s+(.*))?\s*\z/m
+    # číslo tasku (mriežka # je voliteľná: "#123" aj "123"), za ním voliteľný
+    # komentár. Číslo musí byť na začiatku a ukončené medzerou alebo koncom.
+    TITLE_RE = /\A\s*#?(\d+)(?:\s+(.*))?\s*\z/m
 
     # Work types z Worksheetu, ktoré sa nikdy neimportujú (neproduktívne)
     EXCLUDE_WORK_TYPES = [

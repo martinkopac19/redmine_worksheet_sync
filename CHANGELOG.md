@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.4 — 2026-07-20
+- The leading hash is now optional: both `#55310` and `55310` are accepted.
+
 ## 0.2.3 — 2026-07-20
 - "Suggest all" button: fills the automatic name-based mapping guess for every
   not-yet-mapped employee (manual choices are kept). Complements "Unmap all".

@@ -1,6 +1,6 @@
 en:
   label_worksheet_sync: "Worksheet sync"
-  text_ws_intro: "Imports logged time from ws.previo.cz into Redmine. When a worksheet entry starts with #<issue id>, the time is logged to that issue. Configuration is central (admins only)."
+  text_ws_intro: "Imports logged time from ws.previo.cz into Redmine. When a worksheet entry starts with an issue number (with or without a hash — e.g. #55310 or 55310), the time is logged to that issue. Configuration is central (admins only)."
 
   label_ws_config: "Settings"
   label_ws_api_key: "Worksheet API key"

@@ -1,6 +1,6 @@
 cs:
   label_worksheet_sync: "Worksheet sync"
-  text_ws_intro: "Přenáší odpracovaný čas z ws.previo.cz do Redmine. Když worksheet záznam začíná #<číslo tasku>, čas se zapíše k danému úkolu. Nastavení je centrální (jen pro administrátory)."
+  text_ws_intro: "Přenáší odpracovaný čas z ws.previo.cz do Redmine. Když worksheet záznam začíná číslem úkolu (s mřížkou i bez — např. #55310 nebo 55310), čas se zapíše k danému úkolu. Nastavení je centrální (jen pro administrátory)."
 
   label_ws_config: "Nastavení"
   label_ws_api_key: "Worksheet API klíč"

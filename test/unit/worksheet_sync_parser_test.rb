@@ -17,6 +17,20 @@ class WorksheetSyncParserTest < ActiveSupport::TestCase
     assert_equal '', (m[2] || '').strip
   end
 
+  def test_matches_number_without_hash
+    m = RE.match('55310')
+    assert m
+    assert_equal '55310', m[1]
+    assert_equal '', (m[2] || '').strip
+  end
+
+  def test_matches_number_without_hash_with_comment
+    m = RE.match('55310 fix pricing')
+    assert m
+    assert_equal '55310', m[1]
+    assert_equal 'fix pricing', (m[2] || '').strip
+  end
+
   def test_trims_and_keeps_inner_spaces
     m = RE.match('  #52291   viac   slov  ')
     assert m
