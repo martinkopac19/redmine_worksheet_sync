@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.8 — 2026-08-05
+- **Removed the "…or the service user's API key" option.** The author of imported
+  time entries is now chosen only through the *Service user* dropdown. The key was
+  just a second route to the same account, and it meant one more secret to store
+  and rotate for no gain.
+- Any previously stored `service_api_key` is dropped from the settings the next time
+  the configuration is saved.
+
 ## 0.2.7 — 2026-08-05
 - **Security:** the API key fields no longer render their value. `password_field_tag`
   with a value emits `<input type="password" value="THE_REAL_KEY">` — `type="password"`

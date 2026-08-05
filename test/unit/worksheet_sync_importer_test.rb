@@ -24,7 +24,7 @@ class WorksheetSyncImporterTest < ActiveSupport::TestCase
 
   def settings(overrides = {})
     {
-      'ws_api_key' => 'x', 'service_user_id' => 1, 'service_api_key' => '',
+      'ws_api_key' => 'x', 'service_user_id' => 1,
       'activity_name' => 'Development', 'cron_enabled' => false,
       'cron_window_days' => 10, 'mapping' => { '99' => 2 }
     }.merge(overrides)

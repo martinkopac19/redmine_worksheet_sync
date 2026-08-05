@@ -7,8 +7,6 @@ cs:
   text_ws_api_key_hint: "Centrální klíč z ws.previo.cz (Bearer). Používá se jen ke čtení worksheetů; mzdová pole se ignorují."
   label_ws_service_user: "Servisní uživatel (autor záznamů)"
   text_ws_service_user_hint: "Pod tímto uživatelem se záznamy vytvoří. Doporučeno vytvořit zvlášť účet, ne osobní."
-  label_ws_service_api_key: "…nebo API klíč servisního uživatele"
-  text_ws_service_api_key_hint: "Volitelné — když vyplníš, uživatel se odvodí z klíče."
   label_ws_activity: "Aktivita"
   label_ws_cron_enabled: "Zapnout automatický (cron) import"
   text_ws_cron_hint: "Cron importuje jen uzamčené dny (které už nelze ve Worksheetu upravit)."

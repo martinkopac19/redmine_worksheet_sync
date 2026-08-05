@@ -10,14 +10,13 @@ Redmine::Plugin.register :redmine_worksheet_sync do
   name 'Redmine Worksheet Sync (Previo)'
   author 'Martin Kopáč'
   description 'Imports logged time from ws.previo.cz into Redmine when a worksheet entry starts with #<issue id>. Central, admin-driven.'
-  version '0.2.7'
+  version '0.2.8'
   url 'https://github.com/martinkopac19/redmine_worksheet_sync'
   requires_redmine version_or_higher: '5.0'
 
   settings default: {
     'ws_api_key'       => '',
     'service_user_id'  => nil,
-    'service_api_key'  => '',
     'activity_name'    => 'Development',
     'cron_enabled'     => false,
     'cron_window_days' => 10,

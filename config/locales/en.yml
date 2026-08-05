@@ -7,8 +7,6 @@ en:
   text_ws_api_key_hint: "Central ws.previo.cz key (Bearer). Used only to read worksheets; salary fields are ignored."
   label_ws_service_user: "Service user (author of entries)"
   text_ws_service_user_hint: "Entries are created under this user. A dedicated (non-personal) account is recommended."
-  label_ws_service_api_key: "…or the service user's API key"
-  text_ws_service_api_key_hint: "Optional — if set, the user is resolved from the key."
   label_ws_activity: "Activity"
   label_ws_cron_enabled: "Enable automatic (cron) import"
   text_ws_cron_hint: "Cron imports only locked days (that can no longer be edited in Worksheet)."

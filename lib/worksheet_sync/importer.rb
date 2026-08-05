@@ -123,11 +123,10 @@ module WorksheetSync
       acts.detect { |a| a.name == @activity_nm } || acts.first
     end
 
+    # Autor záznamov = jeden účet vybraný v konfigurácii. Voľba „…alebo API kľúč
+    # servisného účtu" (User.find_by_api_key) bola zrušená — bola to len druhá
+    # cesta k tomu istému a znamenala ďalší kľúč, ktorý treba niekde držať.
     def resolve_service_user
-      if @s['service_api_key'].present?
-        u = User.find_by_api_key(@s['service_api_key'])
-        return u if u
-      end
       User.find_by_id(@s['service_user_id'])
     end
   end

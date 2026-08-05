@@ -84,24 +84,6 @@
       <em class="info"><%= l(:text_ws_service_user_hint) %></em>
     </p>
     <p>
-      <label><%= l(:label_ws_service_api_key) %></label>
-      <%# To isté — hodnota sa do HTML nedostane. %>
-      <%= password_field_tag 'service_api_key', nil, size: 40, autocomplete: 'off' %>
-      <em class="info">
-        <strong><%= @settings['service_api_key'].to_s.present? ?
-                      l(:text_ws_key_set, hint: @settings['service_api_key'].to_s[-4..].to_s) :
-                      l(:text_ws_key_missing) %></strong><br />
-        <%= l(:text_ws_service_api_key_hint) %> <%= l(:text_ws_key_keep_hint) %>
-      </em>
-    </p>
-    <% if @settings['service_api_key'].to_s.present? %>
-      <p>
-        <label><%= l(:label_ws_key_clear) %></label>
-        <%= check_box_tag 'service_api_key_clear', '1', false %>
-        <em class="info"><%= l(:text_ws_key_clear_hint) %></em>
-      </p>
-    <% end %>
-    <p>
       <label><%= l(:label_ws_activity) %></label>
       <%= select_tag 'activity_name',
             options_for_select(@activities.map { |a| [a.name, a.name] }, @settings['activity_name']) %>

@@ -21,8 +21,7 @@ Regular users configure nothing. A Redmine **administrator** sets everything in
 
 - **One central Worksheet API key** (broad scope, reads everyone's worksheets).
 - **Service user** — the Redmine account under which entries are *created*
-  (`author`). Pick a user or paste that user's Redmine API key. Use a dedicated
-  account, not a personal one.
+  (`author`), picked from a dropdown. Use a dedicated account, not a personal one.
 - **Mapping** Worksheet employee → Redmine user (with automatic name-based
   suggestions). Only mapped employees are imported.
 
