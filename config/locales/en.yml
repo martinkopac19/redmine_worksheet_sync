@@ -53,3 +53,8 @@ en:
   label_ws_no_runs: "No runs yet."
   label_ws_export_csv: "Export to CSV"
   label_ws_source: "Triggered by"
+  label_ws_key_clear: "Remove key"
+  text_ws_key_clear_hint: "Tick and save to delete the stored key."
+  text_ws_key_set: "Key is set (…%{hint})"
+  text_ws_key_missing: "No key set."
+  text_ws_key_keep_hint: "Leave the field empty to keep the existing key — for security the key is never sent to the browser."

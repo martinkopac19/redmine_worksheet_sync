@@ -10,9 +10,13 @@ class WorksheetSyncController < ApplicationController
 
   def update
     s = current_settings
-    s['ws_api_key']       = params[:ws_api_key].to_s.strip
+    # Polia na kľúče sa renderujú vždy prázdne, aby kľúč nebol v HTML zdroji
+    # (viď komentár v show.html.erb). Prázdna hodnota preto znamená "nechaj
+    # existujúci kľúč", nie "zmaž" — na zmazanie je samostatný checkbox.
+    s['ws_api_key']       = merged_key(s['ws_api_key'], :ws_api_key, :ws_api_key_clear)
     s['service_user_id']  = params[:service_user_id].presence
-    s['service_api_key']  = params[:service_api_key].to_s.strip
+    s['service_api_key']  = merged_key(s['service_api_key'], :service_api_key,
+                                       :service_api_key_clear)
     s['activity_name']    = params[:activity_name].presence || 'Development'
     s['cron_enabled']     = params[:cron_enabled] == '1'
     s['cron_window_days'] = params[:cron_window_days].presence&.to_i || 10
@@ -21,6 +25,15 @@ class WorksheetSyncController < ApplicationController
     flash[:notice] = l(:notice_successful_update)
     redirect_to action: 'show'
   end
+
+  # Prázdne pole = ponechaj uložený kľúč; zaškrtnutý clear = zmaž.
+  def merged_key(current, field, clear_field)
+    return '' if params[clear_field].to_s == '1'
+
+    submitted = params[field].to_s.strip
+    submitted.presence || current.to_s
+  end
+  private :merged_key
 
   def run
     from = params[:from].presence || (Date.today - 14).to_s

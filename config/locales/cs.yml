@@ -53,3 +53,8 @@ cs:
   label_ws_no_runs: "Zatím žádný běh."
   label_ws_export_csv: "Export do CSV"
   label_ws_source: "Spuštěno"
+  label_ws_key_clear: "Smazat klíč"
+  text_ws_key_clear_hint: "Zaškrtni a ulož, pokud chceš uložený klíč odstranit."
+  text_ws_key_set: "Klíč je nastaven (…%{hint})"
+  text_ws_key_missing: "Klíč není nastaven."
+  text_ws_key_keep_hint: "Pole nechej prázdné, pokud chceš existující klíč ponechat — z bezpečnostních důvodů se klíč do prohlížeče neposílá."

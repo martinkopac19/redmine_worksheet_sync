@@ -55,9 +55,28 @@
     <legend><%= l(:label_ws_config) %></legend>
     <p>
       <label><%= l(:label_ws_api_key) %></label>
-      <%= password_field_tag 'ws_api_key', @settings['ws_api_key'], size: 40, autocomplete: 'off' %>
-      <em class="info"><%= l(:text_ws_api_key_hint) %></em>
+      <%#
+        POZOR: hodnotu tu NEVYPISOVAŤ. `password_field_tag 'x', @settings['key']`
+        vykreslí <input type="password" value="SKUTOCNY_KLUC"> — type="password"
+        maskuje kľúč len vizuálne, v HTML je celý a vidno ho cez Inspect element.
+        Pole je preto vždy prázdne; prázdne pole existujúci kľúč nezmaže (viď
+        WorksheetSyncController#update).
+      %>
+      <%= password_field_tag 'ws_api_key', nil, size: 40, autocomplete: 'off' %>
+      <em class="info">
+        <strong><%= @settings['ws_api_key'].to_s.present? ?
+                      l(:text_ws_key_set, hint: @settings['ws_api_key'].to_s[-4..].to_s) :
+                      l(:text_ws_key_missing) %></strong><br />
+        <%= l(:text_ws_api_key_hint) %> <%= l(:text_ws_key_keep_hint) %>
+      </em>
     </p>
+    <% if @settings['ws_api_key'].to_s.present? %>
+      <p>
+        <label><%= l(:label_ws_key_clear) %></label>
+        <%= check_box_tag 'ws_api_key_clear', '1', false %>
+        <em class="info"><%= l(:text_ws_key_clear_hint) %></em>
+      </p>
+    <% end %>
     <p>
       <label><%= l(:label_ws_service_user) %></label>
       <%= select_tag 'service_user_id',
@@ -66,9 +85,22 @@
     </p>
     <p>
       <label><%= l(:label_ws_service_api_key) %></label>
-      <%= password_field_tag 'service_api_key', @settings['service_api_key'], size: 40, autocomplete: 'off' %>
-      <em class="info"><%= l(:text_ws_service_api_key_hint) %></em>
+      <%# To isté — hodnota sa do HTML nedostane. %>
+      <%= password_field_tag 'service_api_key', nil, size: 40, autocomplete: 'off' %>
+      <em class="info">
+        <strong><%= @settings['service_api_key'].to_s.present? ?
+                      l(:text_ws_key_set, hint: @settings['service_api_key'].to_s[-4..].to_s) :
+                      l(:text_ws_key_missing) %></strong><br />
+        <%= l(:text_ws_service_api_key_hint) %> <%= l(:text_ws_key_keep_hint) %>
+      </em>
     </p>
+    <% if @settings['service_api_key'].to_s.present? %>
+      <p>
+        <label><%= l(:label_ws_key_clear) %></label>
+        <%= check_box_tag 'service_api_key_clear', '1', false %>
+        <em class="info"><%= l(:text_ws_key_clear_hint) %></em>
+      </p>
+    <% end %>
     <p>
       <label><%= l(:label_ws_activity) %></label>
       <%= select_tag 'activity_name',

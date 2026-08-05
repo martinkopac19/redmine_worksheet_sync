@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.7 — 2026-08-05
+- **Security:** the API key fields no longer render their value. `password_field_tag`
+  with a value emits `<input type="password" value="THE_REAL_KEY">` — `type="password"`
+  masks the key visually only, and it was fully readable via Inspect element or
+  View source. Both fields (`ws_api_key`, `service_api_key`) are now always
+  rendered empty; only the last four characters are shown as a hint.
+- Because the field is empty, an empty submit now means **"keep the stored key"**
+  instead of wiping it. A separate **Remove key** checkbox does the deleting.
+- Rotate the Worksheet key if it may have been read from the page source: it has
+  broad scope, including salary fields.
+
 ## 0.2.6 — 2026-07-20
 - Fix: unmapping an employee now persists. Name-based suggestions only pre-fill
   on first setup (before anything is saved); afterwards the saved state is
