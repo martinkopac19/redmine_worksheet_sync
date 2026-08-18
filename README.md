@@ -98,6 +98,8 @@ RAILS_ENV=test bin/rails redmine:plugins:test NAME=redmine_worksheet_sync
 
 ## License
 
+Copyright (C) 2026 Martin Kopáč
+
 GPL-2.0-or-later, matching Redmine. See [LICENSE](LICENSE).
 
 ## Credits
